@@ -1,0 +1,159 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Product {
+    int id;
+    String name;
+    int quantity;
+
+    Product(int id, String name, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+    }
+
+    void display() {
+        System.out.println(id + " | " + name + " | Stock: " + quantity);
+    }
+}
+
+public class InventorySystem {
+
+    static ArrayList<Product> products = new ArrayList<>();
+    static Scanner sc = new Scanner(System.in);
+
+    // Find product by ID
+    static Product findProduct(int id) {
+        for (Product p : products) {
+            if (p.id == id)
+                return p;
+        }
+        return null;
+    }
+
+    // Add new product
+    static void addProduct() {
+        System.out.print("Enter Product ID: ");
+        int id = sc.nextInt();
+
+        if (findProduct(id) != null) {
+            System.out.println("Product with this ID already exists!");
+            return;
+        }
+
+        sc.nextLine(); // clear buffer
+        System.out.print("Enter Product Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter Quantity: ");
+        int qty = sc.nextInt();
+
+        if (qty < 0) {
+            System.out.println("Quantity cannot be negative!");
+            return;
+        }
+
+        products.add(new Product(id, name, qty));
+        System.out.println("Product Added Successfully!");
+    }
+
+    // Update stock
+    static void updateStock() {
+        System.out.print("Enter Product ID: ");
+        int id = sc.nextInt();
+
+        Product p = findProduct(id);
+        if (p != null) {
+            System.out.print("Enter quantity to add: ");
+            int qty = sc.nextInt();
+
+            if (qty < 0) {
+                System.out.println("Invalid quantity!");
+                return;
+            }
+
+            p.quantity += qty;
+            System.out.println("Stock Updated Successfully!");
+        } else {
+            System.out.println("Product not found!");
+        }
+    }
+
+    // Sell product
+    static void sellProduct() {
+        System.out.print("Enter Product ID: ");
+        int id = sc.nextInt();
+
+        Product p = findProduct(id);
+        if (p != null) {
+            System.out.print("Enter quantity to sell: ");
+            int sellQty = sc.nextInt();
+
+            if (sellQty <= 0) {
+                System.out.println("Invalid quantity!");
+                return;
+            }
+
+            if (sellQty <= p.quantity) {
+                p.quantity -= sellQty;
+                System.out.println("Product Sold Successfully!");
+            } else {
+                System.out.println("Insufficient Stock!");
+            }
+        } else {
+            System.out.println("Product not found!");
+        }
+    }
+
+    // View inventory
+    static void viewInventory() {
+        if (products.isEmpty()) {
+            System.out.println("Inventory is empty!");
+            return;
+        }
+
+        System.out.println("\n===== INVENTORY LIST =====");
+        for (Product p : products) {
+            p.display();
+        }
+    }
+
+    public static void main(String[] args) {
+        int choice;
+
+        do {
+            System.out.println("\n===== INVENTORY MANAGEMENT SYSTEM =====");
+            System.out.println("1. Add Product");
+            System.out.println("2. Update Stock");
+            System.out.println("3. Sell Product");
+            System.out.println("4. View Inventory");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addProduct();
+                    break;
+                case 2:
+                    updateStock();
+                    break;
+                case 3:
+                    sellProduct();
+                    break;
+                case 4:
+                    viewInventory();
+                    break;
+                case 5:
+                    System.out.println("Exiting system... Thank you!");
+                    break;
+                default:
+                    System.out.println("Invalid choice! Try again.");
+            }
+
+        } while (choice != 5);
+
+        sc.close();
+    }
+}
