@@ -1,0 +1,87 @@
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+
+public class AttendanceSystem {
+
+    static final String FILE_NAME = "attendance.txt";
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n===== Attendance Management System =====");
+            System.out.println("1. Mark Attendance");
+            System.out.println("2. View Attendance");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+
+                case 1:
+                    markAttendance(sc);
+                    break;
+
+                case 2:
+                    viewAttendance();
+                    break;
+
+                case 3:
+                    System.out.println("Exiting system... Thank you!");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+
+        } while (choice != 3);
+
+        sc.close();
+    }
+
+    static void markAttendance(Scanner sc) {
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
+
+            System.out.print("Enter Student Name: ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter Status (Present/Absent): ");
+            String status = sc.nextLine();
+
+            String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+
+            bw.write(name + " | " + status + " | " + date);
+            bw.newLine();
+
+            System.out.println("Attendance saved successfully!");
+
+        } catch (IOException e) {
+            System.out.println("Error saving attendance.");
+        }
+    }
+
+    static void viewAttendance() {
+
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
+
+            String line;
+            System.out.println("\n===== Attendance Records =====");
+
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("No attendance records found yet.");
+        } catch (IOException e) {
+            System.out.println("Error reading attendance file.");
+        }
+    }
+}
