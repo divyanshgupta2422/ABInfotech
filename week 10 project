@@ -1,0 +1,161 @@
+import java.util.*;
+
+class Student {
+    private int id;
+    private String name;
+    private String course;
+    private double marks;
+
+    Student(int id, String name, String course, double marks) {
+        this.id = id;
+        this.name = name;
+        this.course = course;
+        this.marks = marks;
+    }
+
+    int getId() {
+        return id;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    String getCourse() {
+        return course;
+    }
+
+    double getMarks() {
+        return marks;
+    }
+
+    void setName(String name) {
+        this.name = name;
+    }
+
+    void setCourse(String course) {
+        this.course = course;
+    }
+
+    void setMarks(double marks) {
+        this.marks = marks;
+    }
+}
+
+class StudentView {
+
+    void displayStudentDetails(Student student) {
+
+        System.out.println("\n===== STUDENT DETAILS =====");
+        System.out.println("Student ID    : " + student.getId());
+        System.out.println("Student Name  : " + student.getName());
+        System.out.println("Course        : " + student.getCourse());
+        System.out.println("Marks         : " + student.getMarks());
+    }
+
+    void displayMessage(String message) {
+        System.out.println(message);
+    }
+}
+
+class StudentController {
+
+    private Student model;
+    private StudentView view;
+
+    StudentController(Student model, StudentView view) {
+        this.model = model;
+        this.view = view;
+    }
+
+    void setStudentName(String name) {
+        model.setName(name);
+    }
+
+    void setStudentCourse(String course) {
+        model.setCourse(course);
+    }
+
+    void setStudentMarks(double marks) {
+        model.setMarks(marks);
+    }
+
+    void updateView() {
+        view.displayStudentDetails(model);
+    }
+}
+
+public class MVCMain {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        Student model = new Student(101, "Yashaswi", "Java Programming", 89.5);
+
+        StudentView view = new StudentView();
+
+        StudentController controller =
+                new StudentController(model, view);
+
+        int choice;
+
+        do {
+
+            System.out.println("\n===== JAVA MVC MANAGEMENT SYSTEM =====");
+            System.out.println("1. View Student Details");
+            System.out.println("2. Update Student Name");
+            System.out.println("3. Update Course");
+            System.out.println("4. Update Marks");
+            System.out.println("5. Exit");
+
+            System.out.print("Enter Choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+
+                case 1:
+                    controller.updateView();
+                    break;
+
+                case 2:
+                    System.out.print("Enter New Name: ");
+                    String name = sc.nextLine();
+
+                    controller.setStudentName(name);
+
+                    view.displayMessage("Student Name Updated Successfully");
+                    break;
+
+                case 3:
+                    System.out.print("Enter New Course: ");
+                    String course = sc.nextLine();
+
+                    controller.setStudentCourse(course);
+
+                    view.displayMessage("Course Updated Successfully");
+                    break;
+
+                case 4:
+                    System.out.print("Enter New Marks: ");
+                    double marks = sc.nextDouble();
+
+                    controller.setStudentMarks(marks);
+
+                    view.displayMessage("Marks Updated Successfully");
+                    break;
+
+                case 5:
+                    System.out.println("Application Closed");
+                    break;
+
+                default:
+                    System.out.println("Invalid Choice");
+            }
+
+        } while (choice != 5);
+
+        sc.close();
+    }
+}
